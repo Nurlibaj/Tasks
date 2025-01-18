@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Cars list:</h1>
+{%for car in cars %}
+<span><b>Name:</b>&nbsp {{car.name}} &nbsp</span>
+<span><b>Color:</b>&nbsp {{car.color}}</span>
+<span><b>Year:</b>&nbsp {{car.year}}</span>
+<hr>
+{% endfor %}
+<div>
+  {{message}}
+</div>
+</body>
+</html>
