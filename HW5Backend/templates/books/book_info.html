@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>
+    Book info:
+</h1>
+
+<h2>Title:</h2><span>{{book[0].title}}</span>
+<h2>Author:</h2><span>{{book[0].author}}</span>
+<h2>Year:</h2><span>{{book[0].year}}</span>
+<h2>Total pages:</h2><span>{{book[0].total_pages}}</span>
+<h2>Genre:</h2><span>{{book[0].genre}}</span>
+<form action="/books/{{book[0].id}}/delete" method="post">
+    <input type="submit" value="DELETE">
+</form>
+</body>
+</html>
