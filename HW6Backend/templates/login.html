@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/login" method="post">
+    <label>Enter email:</label><br>
+    <input type="text" name="email"><br>
+    <label>Enter Password:</label><br>
+    <input type="password" name="pwd"><br><br>
+    <input type="submit" value="login">
+</form>
+{% if error%}
+<p> {{error}}</p>
+{%endif%}
+{%if error_message%}
+<p>{{error_message}} </p>
+{%endif%}
+</body>
+</html>

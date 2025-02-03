@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+</head>
+<body>
+    <h1>Your Cart</h1>
+    <ul>
+        {% for flower in flowers %}
+            <li>
+                <strong>{{ flower.name }}</strong><br>
+                Price: ${{ flower.price }}<br>
+                Quantity: {{ flower.count }}<br>
+            </li>
+        {% endfor %}
+    </ul>
+    <hr>
+    <h1>Total price:</h1>
+    <p>${{total_price}}</p>
+    <form action="/purchased" method="post">
+    <input type="submit" value="Buy flowers">
+    </form>
+
+    <a href="/flowers">Back to Flowers</a>
+</body>
+</html>

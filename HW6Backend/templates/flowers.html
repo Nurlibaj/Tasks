@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/flowers" method="post">
+  <label>Title:</label><br>
+  <input type="text" name="title">
+  <br>
+  <label>Count:</label><br>
+  <input type="text" name="count">
+  <br>
+  <label>Price:</label><br>
+  <input type="text" name="price">
+  <br><br>
+  <input type="submit" value="add flower">
+</form>
+ <hr>
+  <h1>List of Flowers:</h1>
+  {%for flower in flowers%}
+  <b>Title:</b><label>{{flower.name}}</label><br>
+  <b>Price:</b><label>{{flower.price}}</label><br>
+  <b>Quantity:</b><label>{{flower.count}}</label><br>
+  <form action="/cart/items" method="post">
+    <input type="hidden" value="{{flower.id}}" name="flower_id">
+    <input type="submit" value="add cart">
+  </form>
+  {%endfor%}
+</body>
+</html>
