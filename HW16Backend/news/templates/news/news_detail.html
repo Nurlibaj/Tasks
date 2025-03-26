@@ -1,0 +1,50 @@
+{% extends 'news/base.html' %}
+
+{% block title %}{{ news.title }}{% endblock %}
+
+{% block content %}
+<h1>{{ news.title }}</h1>
+<p>{{ news.content }}</p>
+<p><b>Дата:</b> {{ news.created_at }}</p>
+
+<!-- Кнопка удаления новости -->
+{% if user == news.author or perms.news.delete_news %}
+<form method="post" action="{% url 'news:news_delete' news.id %}" style="display:inline;">
+  {% csrf_token %}
+  <button type="submit">Удалить новость</button>
+</form>
+{% endif %}
+
+<hr>
+
+<h2>Комментарии:</h2>
+<ul>
+  {% for comment in comments %}
+    <li>
+      {{ comment.content }} ({{ comment.created_at }})
+      <!-- Кнопка удаления комментария -->
+      {% if user == comment.author or perms.news.delete_comment %}
+      <form method="post" action="{% url 'news:comment_delete' comment.id %}" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit">Удалить</button>
+      </form>
+      {% endif %}
+    </li>
+  {% empty %}
+    <li>Комментариев пока нет.</li>
+  {% endfor %}
+</ul>
+
+<h3>Добавить комментарий:</h3>
+{% if user.is_authenticated %}
+<form method="post" action="{% url 'news:add_comment' news.id %}">
+  {% csrf_token %}
+  <input type="text" name="content" required>
+  <button type="submit">Добавить</button>
+</form>
+{% else %}
+<p><i>Добавление комментариев доступно только авторизованным пользователям.</i></p>
+{% endif %}
+
+<br><a href="{% url 'news:news_list' %}">Назад</a>
+{% endblock %}
