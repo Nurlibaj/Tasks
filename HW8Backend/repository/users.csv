@@ -1,0 +1,5 @@
+id,email,password,name,path
+1,admin@gmail.com,123,admin,static\1.png
+2,nurlibaj@gmail.com,123,Нурлыбай,/static/29493348-5f17-46ed-bb94-77d0e7efaa6f.png3
+3,jafar@gmail.com,123,Jafar,static/a26a7f5a-62c6-4e5a-b4fb-6f22a2ef087b.jpg
+4,jafar1@gmail.com,123,Jafar,static/42be80fb-dffb-49db-8b16-f29c7f5d8f69.jpg
