@@ -1,0 +1,30 @@
+{% extends "app/base.html" %}
+{% block title %}Мои акты{% endblock %}
+
+{% block content %}
+<h4 class="mb-4">Мои оформленные акты</h4>
+<p>Всего актов: {{ acts.count }}</p>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>ID акта</th>
+            <th>Дата</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for act in acts %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td><a href="{% url 'act-pdf' act.id %}">ACT-{{ act.id }}</a></td>
+                <td>{{ act.created_at }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3" class="text-center">Вы ещё не оформляли акты.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

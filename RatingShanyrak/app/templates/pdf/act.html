@@ -1,0 +1,18 @@
+<h1>ACTS OF VIOLATION</h1>
+
+<div class="info">
+    <p><strong>Teacher name:</strong> {{ act.from_user.full_name }}</p>
+    <p><strong>Student:</strong> {{ act.to_student.full_name }}</p>
+    <p><strong>Grade:</strong> {{ act.to_student.classroom.name }}</p>
+    <p><strong>Shanyrak:</strong> {{ act.to_student.shanyrak.name }}</p>
+    <p><strong>Level of violation:</strong> {{ act.violation.level.name }}</p>
+    <p><strong>Name of violation:</strong> {{ act.violation.name }}</p>
+    <p><strong>Comment:</strong> {{ act.comment }}</p>
+    <p><strong>Point:</strong> {{ act.points }}</p>
+    <p><strong>Date:</strong> {{ act.created_at|date:"d.m.Y" }}</p>
+</div>
+
+<div class="signature" style="margin-top: 60px;">
+    <div style="margin-bottom: 30px;"><strong>Signature of teacher:</strong> <span style="display:inline-block; border-bottom: 1px solid #000; width:300px; margin-left:20px;"></span></div>
+    <div><strong>Signature of student:</strong> <span style="display:inline-block; border-bottom: 1px solid #000; width:300px; margin-left:20px;"></span></div>
+</div>

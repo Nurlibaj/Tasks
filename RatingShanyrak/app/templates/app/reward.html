@@ -1,0 +1,106 @@
+<h4>Выдача награды</h4>
+<form id="reward-form" method="post">
+    {% csrf_token %}
+
+    <!-- Класс -->
+    <div class="mb-3">
+        <label for="classroom">Класс:</label>
+        <select name="classroom_id" id="classroom" class="form-select" required>
+            <option value="">Выберите класс</option>
+            {% for c in classrooms %}
+                <option value="{{ c.id }}">{{ c.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Ученик -->
+    <div class="mb-3">
+        <label for="student">Ученик:</label>
+        <select name="student_id" id="student" class="form-select" required>
+            <option value="">Сначала выберите класс</option>
+        </select>
+    </div>
+
+    {% if request.user.role == 3 %}
+    <!-- Категория -->
+    <div class="mb-3">
+        <label for="category">Категория:</label>
+        <select name="category" id="category" class="form-select">
+            <option value="">Выберите категорию</option>
+            <option value="Академическая успеваемость">Академическая успеваемость</option>
+            <option value="Олимпиады">Олимпиады</option>
+            <option value="Конкурсы и проекты">Конкурсы и проекты</option>
+        </select>
+    </div>
+
+    <!-- Уровень (если выбраны олимпиады или конкурсы) -->
+    <div class="mb-3 d-none" id="level-wrapper">
+        <label for="level">Уровень:</label>
+        <select name="level" id="level" class="form-select">
+            <option value="">Выберите уровень</option>
+            <option value="Областной">Областной</option>
+            <option value="Республиканский">Республиканский</option>
+            <option value="Международный">Международный</option>
+        </select>
+    </div>
+    {% endif %}
+
+    <!-- Комментарий -->
+    <div class="mb-3">
+        <label for="comment">Комментарий:</label>
+        <textarea name="comment" id="comment" class="form-control" rows="3" required></textarea>
+    </div>
+
+    <!-- Баллы -->
+    <div class="mb-3">
+        <label for="points">Баллы:</label>
+        <input type="number" name="points" id="points" class="form-control" required>
+    </div>
+
+    <button type="submit" class="btn btn-success">Сохранить награду</button>
+</form>
+
+<div id="reward-message" class="mt-3"></div>
+
+<script>
+    $('#classroom').change(function () {
+        const classId = $(this).val();
+        $.get(`/api/students/?classroom_id=${classId}`, function (data) {
+            const $student = $('#student');
+            $student.empty();
+            $student.append('<option value=\"\">Выберите ученика</option>');
+            data.forEach(student => {
+                $student.append(`<option value=\"${student.id}\">${student.full_name}</option>`);
+            });
+        });
+    });
+
+    {% if request.user.role == 3 %}
+    // Показывать уровень, если выбрана соответствующая категория
+    $('#category').change(function () {
+        const val = $(this).val();
+        if (val === 'Олимпиады' || val === 'Конкурсы и проекты') {
+            $('#level-wrapper').removeClass('d-none');
+        } else {
+            $('#level-wrapper').addClass('d-none');
+        }
+    });
+    {% endif %}
+
+    $('#reward-form').submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '{% url "reward-section" %}',
+            data: $(this).serialize(),
+            success: function () {
+                $('#reward-message').html('<div class="alert alert-success">Награда сохранена.</div>');
+                $('#reward-form')[0].reset();
+                $('#level-wrapper').addClass('d-none');
+            },
+            error: function () {
+                $('#reward-message').html('<div class="alert alert-danger">Ошибка при сохранении.</div>');
+            }
+        });
+    });
+</script>

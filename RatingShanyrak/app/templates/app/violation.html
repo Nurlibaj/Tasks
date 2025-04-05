@@ -1,0 +1,102 @@
+<h4>Оформление акта нарушения</h4>
+<form id="violation-form" method="post">
+    {% csrf_token %}
+
+    <!-- Класс -->
+    <div class="mb-3">
+        <label for="classroom">Класс:</label>
+        <select name="classroom_id" id="classroom" class="form-select" required>
+            <option value="">Выберите класс</option>
+            {% for c in classrooms %}
+                <option value="{{ c.id }}">{{ c.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Ученик -->
+    <div class="mb-3">
+        <label for="student">Ученик:</label>
+        <select name="student_id" id="student" class="form-select" required>
+            <option value="">Сначала выберите класс</option>
+        </select>
+    </div>
+
+    <!-- Уровень нарушения -->
+    <div class="mb-3">
+        <label for="level">Уровень нарушения:</label>
+        <select name="level_id" id="level" class="form-select" required>
+            <option value="">Выберите уровень</option>
+            {% for lvl in levels %}
+                <option value="{{ lvl.id }}">{{ lvl.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Тип нарушения -->
+    <div class="mb-3">
+        <label for="violation">Тип нарушения:</label>
+        <select name="violation_id" id="violation" class="form-select" required>
+            <option value="">Сначала выберите уровень</option>
+        </select>
+    </div>
+
+    <!-- Комментарий -->
+    <div class="mb-3">
+        <label for="comment">Комментарий:</label>
+        <textarea name="comment" id="comment" class="form-control" rows="3" required></textarea>
+    </div>
+
+    <!-- Баллы -->
+    <div class="mb-3">
+        <label for="points">Баллы (в пределах уровня):</label>
+        <input type="number" name="points" id="points" class="form-control" required>
+    </div>
+
+    <button type="submit" class="btn btn-danger">Сохранить акт</button>
+</form>
+
+<div id="violation-message" class="mt-3"></div>
+
+<!-- AJAX Загрузка -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    $('#classroom').change(function () {
+        const classId = $(this).val();
+        $.get(`/api/students/?classroom_id=${classId}`, function (data) {
+            const $student = $('#student');
+            $student.empty();
+            $student.append('<option value=\"\">Выберите ученика</option>');
+            data.forEach(student => {
+                $student.append(`<option value=\"${student.id}\">${student.full_name}</option>`);
+            });
+        });
+    });
+
+    $('#level').change(function () {
+        const levelId = $(this).val();
+        $.get(`/api/violations/?level_id=${levelId}`, function (data) {
+            const $violation = $('#violation');
+            $violation.empty();
+            $violation.append('<option value=\"\">Выберите нарушение</option>');
+            data.forEach(v => {
+                $violation.append(`<option value=\"${v.id}\">${v.name}</option>`);
+            });
+        });
+    });
+
+    $('#violation-form').submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '{% url "violation-section" %}',
+            data: $(this).serialize(),
+            success: function () {
+                $('#violation-message').html('<div class="alert alert-success">Акт сохранён.</div>');
+                $('#violation-form')[0].reset();
+            },
+            error: function () {
+                $('#violation-message').html('<div class="alert alert-danger">Ошибка при сохранении.</div>');
+            }
+        });
+    });
+</script>

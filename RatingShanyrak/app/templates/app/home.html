@@ -1,0 +1,10 @@
+{% extends "app/base.html" %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h2 class="mb-4">Добро пожаловать, {{ user.full_name }}!</h2>
+    <p>Выберите одно из действий выше — <strong>Награда</strong> или <strong>Наказание</strong>.</p>
+</div>
+{% endblock %}
