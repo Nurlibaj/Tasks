@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse,HttpResponse
 from django.shortcuts import render, redirect
-from .models import Classroom, Student, ViolationLevel, ViolationType, ViolationAct,PointReward
+from .models import Classroom, Student, ViolationLevel, ViolationType, ViolationAct,PointReward,Shanyrak
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from datetime import date
@@ -10,6 +10,7 @@ from io import BytesIO
 from django.template.loader import get_template
 import os
 from django.conf import settings
+from django.db.models import Sum
 
 
 @login_required
@@ -128,3 +129,26 @@ def act_pdf_view(request, id):
     if pisa_status.err:
         return HttpResponse('Ошибка генерации PDF', status=500)
     return response
+
+#статистика
+def shanyrak_stats(request):
+    shanyraks = Shanyrak.objects.all()
+    labels = []
+    values = []
+
+    for shanyrak in shanyraks:
+        students = shanyrak.student_set.values_list('id', flat=True)
+
+        rewards = PointReward.objects.filter(to_student_id__in=students).aggregate(total=Sum('points'))['total'] or 0
+        violations = ViolationAct.objects.filter(to_student_id__in=students).aggregate(total=Sum('points'))['total'] or 0
+
+        total = rewards + violations
+        display = total if total > 0 else 0
+
+        labels.append(shanyrak.name)
+        values.append(display)
+
+    return render(request, 'app/shanyrak_stats.html', {
+        'labels': labels,
+        'values': values
+    })

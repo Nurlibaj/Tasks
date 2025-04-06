@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (
     login_view, logout_view, home_view,
-    violation_section,api_students,api_violations,reward_section,my_acts_view,act_pdf_view
+    violation_section,api_students,api_violations,reward_section,my_acts_view,act_pdf_view,shanyrak_stats
 )
 
 urlpatterns = [
@@ -14,5 +14,7 @@ urlpatterns = [
     path('section/reward/', reward_section, name='reward-section'),
     path('my-acts/', my_acts_view, name='my-acts'),
     path('act/<int:id>/pdf/', act_pdf_view, name='act-pdf'),
+    path('shanyrak-stats/', shanyrak_stats, name='shanyrak-stats'),
+
 
 ]
