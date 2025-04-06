@@ -36,9 +36,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['full_name', 'role']
-
     objects = UserManager()
-
     def __str__(self):
         return f"{self.full_name} ({self.get_role_display()})"
 

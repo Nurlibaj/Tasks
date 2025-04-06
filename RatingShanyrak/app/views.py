@@ -18,7 +18,7 @@ def home_view(request):
     return render(request, 'app/home.html')
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('home')  # позже добавим домашнюю страницу
+        return redirect('home')
 
     if request.method == 'POST':
         email = request.POST.get('email')
